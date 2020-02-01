@@ -53,8 +53,8 @@ def web_page():
       </head>
       <body> 
         <h1>Do Not Disturb</h1>
-        <p><a href="/?dnd=GREEN"><button class="button green">GREEN</button></a></p>
-        <p><a href="/?dnd=RED"><button class="button red">RED</button></a></p>
+        <p><a href="/?dnd=G"><button class="button green">GREEN</button></a></p>
+        <p><a href="/?dnd=R"><button class="button red">RED</button></a></p>
       </body>
     </html>
     """
@@ -68,6 +68,9 @@ def set_color(color):
 def set_red():
     set_color((255, 0, 0, 0))
 
+def set_yellow():
+    set_color((255, 255, 0, 0))
+    
 def set_green():
     set_color((0, 255, 0, 0))
 
@@ -90,15 +93,22 @@ while True:
     print('REQUEST QUERY = %s' % request_query)
     if (request_query.startswith('/?dnd=')):
         request_color = request_query.split('=')[1]
-        if (request_color == 'GREEN'):
+        if (request_color == 'G'):
             set_green()
-        elif (request_color == 'RED'):
+        elif (request_color == 'R'):
             set_red()
+        elif (request_color == 'B'):
+            set_blue()
+        elif (request_color == 'Y'):
+            set_yellow()
         else:
             set_lightwhite()
 
     response = web_page()
     conn.send('HTTP/1.1 200 OK\n')
+    conn.send('Content-Length: ')
+    conn.send(str(len(response)))
+    conn.send('\n')
     conn.send('Content-Type: text/html\n')
     conn.send('Connection: close\n\n')
     conn.sendall(response)
